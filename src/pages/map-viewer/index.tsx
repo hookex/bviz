@@ -4,6 +4,7 @@ import {getCameraArgs, getWorldSize} from "../../utils";
 import FloorLayer from "./components/floor-layer";
 import {Box} from "./components/box";
 import HouseLayer from "./components/house-layer";
+import {Engine, Scene} from "react-babylonjs";
 
 interface MapViewerProps {
 
@@ -52,15 +53,17 @@ export function MapViewer(props: MapViewerProps) {
     const layers = getLayers(floorsData);
 
     return (
-        <>
-            <arcRotateCamera name='camera' alpha={alpha}
-                             beta={beta} radius={radius}
-                             target={target}/>
+        <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
+            <Scene>
+                <arcRotateCamera name='camera' alpha={alpha}
+                                 beta={beta} radius={radius}
+                                 target={target}/>
 
-            <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()}/>
+                <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()}/>
 
-            {layers}
-        </>
+                {layers}
+            </Scene>
+        </Engine>
     )
 }
 
@@ -79,7 +82,7 @@ export function getLayers(floorsData: Floor[]): ReactElement[] {
 
             const boxes = [];
             for (let i = 0; i < width; i += 10) {
-                for (let j = 0; j <depth; j += 10) {
+                for (let j = 0; j < depth; j += 10) {
                     boxes.push(<Box key={`${i}-${j}`} position={new Vector3(i, 0, j)}/>)
                 }
             }
