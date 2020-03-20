@@ -1,9 +1,9 @@
 import React, {ReactElement} from "react";
 import {Vector3} from "@babylonjs/core";
 import {getCameraArgs, getWorldSize} from "../../utils";
-import FloorLayer from "../../components/floor-layer";
-import {Box} from "../../components/box";
-import HouseLayer from "../../components/house-layer";
+import FloorLayer from "./components/floor-layer";
+import {Box} from "./components/box";
+import HouseLayer from "./components/house-layer";
 
 interface MapViewerProps {
 
