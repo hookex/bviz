@@ -4,7 +4,7 @@ import './App.css';
 import {Vector3} from "@babylonjs/core";
 import FloorLayer from "./components/floor-layer";
 import {getCameraArgs, getWorldSize} from "./utils";
-import {MapViewer} from "./map-viewer";
+import {MapViewer} from "./pages/map-viewer";
 
 function App() {
 

@@ -1,5 +1,5 @@
 import {Vector3} from "@babylonjs/core";
-import {Floor} from "../map-viewer";
+import {Floor} from "../pages/map-viewer";
 
 export function getCameraArgs(worldSize: Vector3) {
     const {x: width, y: height, z: depth} = worldSize;
