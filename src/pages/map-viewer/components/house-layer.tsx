@@ -77,9 +77,7 @@ export default function HouseLayer(props: HouseProps) {
 }
 
 export function getSlideUpAnimation(position: Vector3, offsetY: number): Animation[] {
-    // mesh.scaling.multiplyByFloats(2, 2, 2);
     const {x, y, z} = position;
-    // mesh.scaling.set(2*x, 2*y, 2*z);
 
     const keys = [];
 
