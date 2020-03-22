@@ -1,19 +1,35 @@
-
-
 import * as Babylon from '@babylonjs/core';
 import { Globals, FrameLoop, update } from '@react-spring/core';
+import { createStringInterpolator } from '@react-spring/shared/stringInterpolation';
+
 // import {} from 'react-babylonjs';
 
 // Extend animated with all the available Babylon elements
 // const apply = merge(animated);
 // const extendedAnimated = apply(Babylon);
 
+function addEffect() {
+    console.log('addEffect');
+}
+
 Globals.assign({
-    defaultElement: 'transformNode',
+    defaultElement: 'sphere',
+    // frameLoop: addEffect && new FrameLoop({
+    //     update: () => {
+    //         console.log('update')
+    //         return true;
+    //     },
+    //     onFrame: () => {
+    //         console.log('onframe')
+    //     },
+    //     requestFrame: () => {
+    //         console.log('requestframe')
+    //     }
+    // }),
     applyAnimatedValues: (node, props) => {
         console.log('applyAnimatedValues', node, props);
     },
-    // createStringInterpolator,
+    createStringInterpolator,
     // colorNames,
 })
 

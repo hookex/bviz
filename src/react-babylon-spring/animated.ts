@@ -19,7 +19,7 @@ type CreateAnimated = <T extends ElementType>(
     wrappedComponent: T
 ) => AnimatedComponent<T>
 
-// Extend animated with all the available THREE elements
+// Extend animated with all the available Babylon elements
 export const animated: CreateAnimated & BabylonComponents = extendAnimated(
     withAnimated,
     [...elements],
@@ -27,6 +27,13 @@ export const animated: CreateAnimated & BabylonComponents = extendAnimated(
 )
 
 export { animated as a }
+
+
+
+
+
+
+
 
 /** The type of an `animated()` component */
 export type AnimatedComponent<

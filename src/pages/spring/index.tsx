@@ -5,7 +5,8 @@ import {useSpring,  a}  from '../../react-babylon-spring';
 
 export default function WithSpring() {
     const props:any = useSpring({x: 0, from: {x: -3}});
-console.log(props.x)
+    console.log('props', props)
+
     return (
         <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
             <Scene>
