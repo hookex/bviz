@@ -10,8 +10,8 @@ function App() {
         <div className="App">
             <header className="App-header">
                 {/*<MapViewer/>*/}
-                {/*<WithSpring/>*/}
-                <SpringWithDom/>
+                <WithSpring/>
+                {/*<SpringWithDom/>*/}
             </header>
         </div>
     );

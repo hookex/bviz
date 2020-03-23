@@ -7,10 +7,10 @@ interface SkyboxProps {
   name?: string
 }
 
-const Skybox: React.FC<SkyboxProps> = (props: SkyboxProps) => 
-   <box name={name ? `skybox-${name}` : 'skybox'} size={props.size ?? 100} infiniteDistance={true} renderingGroupId={0}>
+const Skybox: React.FC<SkyboxProps> = ({name,size, rootUrl}: SkyboxProps) =>
+   <box name={name ? `skybox-${name}` : 'skybox'} size={size ?? 100} infiniteDistance={true} renderingGroupId={0}>
      <standardMaterial name={name ? `skybox-material-${name}` : 'skybox-material'} backFaceCulling={false} disableLighting={true}>
-       <cubeTexture key={`cube-texture-${props.rootUrl}`} rootUrl={props.rootUrl} coordinatesMode={Texture.SKYBOX_MODE} assignTo={'reflectionTexture'} />
+       <cubeTexture key={`cube-texture-${rootUrl}`} rootUrl={rootUrl} coordinatesMode={Texture.SKYBOX_MODE} assignTo={'reflectionTexture'} />
      </standardMaterial>
    </box>
 
