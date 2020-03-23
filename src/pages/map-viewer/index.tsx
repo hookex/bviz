@@ -4,7 +4,8 @@ import {getCameraArgs, getWorldSize} from "../../utils";
 import FloorLayer from "./components/floor-layer";
 import {Box} from "./components/box";
 import HouseLayer from "./components/house-layer";
-import {Engine, Scene} from "react-babylonjs";
+import Engine from "../../react-babylonjs/Engine";
+import Scene from "../../react-babylonjs/Scene";
 
 interface MapViewerProps {
 

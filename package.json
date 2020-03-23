@@ -10,29 +10,30 @@
     "@react-spring/animated": "^9.0.0-beta.33",
     "@react-spring/core": "9.0.0-beta.30",
     "@react-spring/shared": "^9.0.0-beta.33",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^10.0.1",
+    "@testing-library/user-event": "^10.0.0",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.3",
+    "@types/react": "^16.9.25",
+    "@types/react-dom": "^16.9.5",
+    "@types/react-reconciler": "^0.18.0",
     "@typescript-eslint/parser": "^2.24.1-alpha.16",
-    "react": "16.12",
-    "react-babylonjs": "^2.0.6",
+    "react": "16.13",
     "react-dom": "^16.13.1",
     "react-reconciler": "^0.25.1",
-    "react-scripts": "3.3",
+    "react-scripts": "3.4",
     "react-spring": "9.0.0-beta.33",
     "redux": "^4.0.5",
     "redux-saga": "^1.1.3",
-    "typescript": "3.6"
+    "typescript": "3.8"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cp": "rsync -ravP --delete ../react-babylonjs/src/ ./src/react-babylonjs/"
   },
   "eslintConfig": {
     "extends": "react-app"

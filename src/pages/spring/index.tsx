@@ -1,7 +1,8 @@
 import {Vector3} from "@babylonjs/core";
-import {Engine, Scene} from 'react-babylonjs';
 import React, {useEffect, useState} from "react";
 import {useSpring,  a}  from '../../react-babylon-spring';
+import Engine from "../../react-babylonjs/Engine";
+import Scene from "../../react-babylonjs/Scene";
 
 export default function WithSpring() {
     const props:any = useSpring({x: 0, from: {x: -3}});

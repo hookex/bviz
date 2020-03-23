@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ReactElement, useEffect, useRef} from 'react';
 
 import {Animation, Color3, Matrix, Vector3} from '@babylonjs/core';
-import {useBabylonScene} from "react-babylonjs";
+import {useBabylonScene} from "../../../react-babylonjs/Scene";
 
 export interface HouseProps {
     width: number;
