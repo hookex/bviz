@@ -79,15 +79,9 @@ export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate,
  * @param scene
  */
 export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, props: any, scene?: Scene) => {
-  if ('intensity' in props) {
-    if (props.intensity > 0.5) {
-      debugger
-    }
-  }
   if (!instance.propsHandlers) {
     return;
   }
-
 
   let initPayload: PropertyUpdate[] = []
   instance.propsHandlers.getPropsHandlers().forEach((propHandler: PropsHandler<any>) => {
