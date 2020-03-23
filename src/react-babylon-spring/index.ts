@@ -1,15 +1,6 @@
-import * as Babylon from '@babylonjs/core';
-import { Globals, FrameLoop, update } from '@react-spring/core';
-import { createStringInterpolator } from '@react-spring/shared/stringInterpolation';
-import {applyInitialPropsToInstance, applyUpdateToInstance} from "../react-babylonjs/UpdateInstance";
-import {deprecateInterpolate} from "@react-spring/shared/deprecations";
-import {createAnimatedInterpolation as to} from "@react-spring/shared/globals";
-
-// import {} from 'react-babylonjs';
-
-// Extend animated with all the available Babylon elements
-// const apply = merge(animated);
-// const extendedAnimated = apply(Babylon);
+import {Globals} from '@react-spring/core';
+import {createStringInterpolator} from '@react-spring/shared/stringInterpolation';
+import {applyInitialPropsToInstance, applyProps} from "../react-babylonjs/UpdateInstance";
 
 function addEffect() {
     console.log('addEffect');
@@ -30,23 +21,18 @@ Globals.assign({
     //     }
     // }),
     applyAnimatedValues: (node, props) => {
-        console.log('applyAnimatedValue', node, props)
-        applyInitialPropsToInstance(node, props)
+        applyProps(node, props)
     },
     createStringInterpolator,
-    createAnimatedInterpolation: (...args: [any, any]) => {
-        console.log('args', args);
-        deprecateInterpolate()
-        return to(...args)
-    },
-    getComponentProps(props: any) {
-        console.log('getComProps', props);
-        return props;
-    }
-
+    // createAnimatedInterpolation: (...args: [any, any]) => {
+    //     console.log('args', args);
+    //     deprecateInterpolate()
+    //     return to(...args)
+    // },
     // colorNames,
 });
 
 export * from './animated';
 export * from '@react-spring/core';
+
 
