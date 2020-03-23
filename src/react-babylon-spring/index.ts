@@ -1,6 +1,7 @@
 import * as Babylon from '@babylonjs/core';
 import { Globals, FrameLoop, update } from '@react-spring/core';
 import { createStringInterpolator } from '@react-spring/shared/stringInterpolation';
+import {applyInitialPropsToInstance, applyUpdateToInstance} from "../react-babylonjs/UpdateInstance";
 
 // import {} from 'react-babylonjs';
 
@@ -27,7 +28,7 @@ Globals.assign({
     //     }
     // }),
     applyAnimatedValues: (node, props) => {
-        console.log('applyAnimatedValues', node, props);
+        applyInitialPropsToInstance(node, props)
     },
     createStringInterpolator,
     // colorNames,

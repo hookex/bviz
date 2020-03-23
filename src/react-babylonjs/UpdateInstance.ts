@@ -1,8 +1,8 @@
-import { Vector3, Color3, Color4, Mesh, Scene } from '@babylonjs/core'
-import { PropertyUpdate, PropsHandler, PropChangeType } from "./PropsHandler"
-import { CreatedInstance } from "./CreatedInstance"
+import {Color3, Color4, Scene, Vector3} from '@babylonjs/core'
+import {PropChangeType, PropertyUpdate, PropsHandler} from "./PropsHandler"
+import {CreatedInstance} from "./CreatedInstance"
 
-export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate, type: string | undefined): void => {
+export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate, type?: string | undefined): void => {
   let target = update.target !== undefined ? hostInstance[update.target] : hostInstance
 
   switch (update.changeType) {
@@ -64,7 +64,7 @@ export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate,
       } else {
         console.error(`Cannot call [not a function] ${update.propertyName}(...) on:`, update.type, target)
       }
-      break;      
+      break;
     default:
       console.error(`Unhandled property update of type ${update.changeType} -> ${update.type}`);
       break;
@@ -73,15 +73,21 @@ export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate,
 
 /**
  * Only applied in this way immediately after instantiation (not on deltas)
- * 
- * @param instance 
- * @param props 
- * @param scene 
+ * TODO: deltas, called by react-spring for updating props
+ * @param instance
+ * @param props
+ * @param scene
  */
-export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, props: any, scene: Scene) => {
+export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, props: any, scene?: Scene) => {
+  if ('intensity' in props) {
+    if (props.intensity > 0.5) {
+      debugger
+    }
+  }
   if (!instance.propsHandlers) {
     return;
   }
+
 
   let initPayload: PropertyUpdate[] = []
   instance.propsHandlers.getPropsHandlers().forEach((propHandler: PropsHandler<any>) => {
@@ -102,3 +108,4 @@ export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, prop
     })
   }
 }
+
