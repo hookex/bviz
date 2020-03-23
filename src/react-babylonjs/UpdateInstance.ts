@@ -13,15 +13,25 @@ export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate,
       // console.log(` > ${type}: updating ${update.type} on ${update.propertyName} to ${update.value}`)
       target[update.propertyName] = update.value;
       break;
-    case PropChangeType.Vector3:
+    case PropChangeType.Vector3: {
+      let {value} = update;
+
+      /**
+       * spring can't interpolate custom Object(Vector3, Color3)
+       */
+      if (Array.isArray(value)) {
+        value = Vector3.FromArray(value);
+      }
+
       if (target[update.propertyName]) {
-        (target[update.propertyName] as Vector3).copyFrom(update.value);
-      } else if (update.value) {
-        target[update.propertyName] = update.value.clone();
+        (target[update.propertyName] as Vector3).copyFrom(value);
+      } else if (value) {
+        target[update.propertyName] = value.clone();
       } else {
-        target[update.propertyName] = update.value; // ie: undefined/null?
+        target[update.propertyName] = value; // ie: undefined/null?
       }
       break
+    }
     case PropChangeType.Color3:
     case PropChangeType.Color4:
       if (target[update.propertyName]) {
