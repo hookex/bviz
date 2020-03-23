@@ -50,6 +50,7 @@
       "last 1 safari version"
     ]
   },
+  "homepage": ".",
   "resolutions": {
     "@typescript-eslint/eslint-plugin": "2.23.0",
     "@typescript-eslint/parser": "2.23.0",
