@@ -16,8 +16,8 @@ function App() {
                 {/*<WithSpringColor/>*/}
                 {/*<WithSpringVector3/>*/}
                 {/*<SpringWithDom/>*/}
-                {/*<WithSpringCamera/>*/}
-                <WithSpringScaling/>
+                <WithSpringCamera/>
+                {/*<WithSpringScaling/>*/}
             </header>
         </div>
     );

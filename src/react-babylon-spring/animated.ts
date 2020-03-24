@@ -13,7 +13,7 @@ type BabylonComponents = { [key: string]: ElementType }
 
 // const elements = Object.keys(Babylon).filter(key => /^[A-Z]/.test(key))
 
-const elements = ['sphere', 'hemisphericLight', 'standardMaterial', 'freeCamera', 'arcRotateCamera'];
+const elements = ['transformNode', 'sphere', 'hemisphericLight', 'standardMaterial', 'freeCamera', 'arcRotateCamera'];
 
 type CreateAnimated = <T extends ElementType>(
     wrappedComponent: T

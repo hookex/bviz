@@ -1,6 +1,7 @@
 import {Vector3} from "@babylonjs/core";
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {a, useSpring} from '../../react-babylon-spring';
+import {useClick, useHover} from '../../hooks';
 import Engine from "../../react-babylonjs/Engine";
 import Scene from "../../react-babylonjs/Scene";
 
@@ -96,23 +97,44 @@ export function WithSpringColor() {
     )
 }
 
+let alpha = 0;
 
 export function WithSpringCamera() {
-    const cameraProps = useSpring({
+    const [hovered, setHovered] = useState(false);
+
+    const [props, set, stop] = useSpring(() => ({
+        alpha,
         radius: 10,
-        from: {
-            radius: 30
-        }
+    }));
+
+    const sphereRef = useRef(null);
+    useHover(sphereRef, _ => {
+        set({
+            radius: 30,
+        })
+    }, _ => {
+        set({
+            radius: 10,
+        })
+    });
+
+    useClick(sphereRef, _ => {
+        alpha += Math.PI/2;
+        set({
+            alpha,
+        })
     });
 
     return (
         <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
-            <Scene>
-                <a.arcRotateCamera name='camera1' alpha={Math.PI / 2} beta={Math.PI / 4} radius={cameraProps.radius}
+            <Scene onScenePointerUp={_ => setHovered(true)}>
+                <a.arcRotateCamera name='camera1' alpha={props.alpha} beta={Math.PI / 4} radius={props.radius}
                                    target={Vector3.Zero()}/>
                 <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()}/>
-                <sphere name='sphere1' diameter={3} segments={16} position={new Vector3(0, 1, 0)}/>
-                <ground name='ground1' width={6} height={6} subdivisions={2}/>
+                <transformNode name='group'>
+                    <sphere ref={sphereRef} name='sphere1' diameter={3} segments={16} position={new Vector3(0, 1, 0)}/>
+                    <ground name='ground1' width={6} height={6} subdivisions={2}/>
+                </transformNode>
             </Scene>
         </Engine>
     )
@@ -122,7 +144,7 @@ export function WithSpringCamera() {
 export function WithSpringScaling() {
     const [hovered, setHovered] = useState(false);
     const props = useSpring({
-        scaling:  hovered ? [2, 2, 2] : [1, 1, 1],
+        scaling: hovered ? [2, 2, 2] : [1, 1, 1],
     });
 
     return (
@@ -169,3 +191,5 @@ export function WithSpringScaling() {
 //         return () => cancelAnimationFrame(timer);
 //     }, []);
 // }
+
+
