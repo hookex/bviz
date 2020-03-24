@@ -39,7 +39,6 @@ export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate,
       if (target[update.propertyName]) {
         switch (update.changeType) {
           case PropChangeType.Color3:
-              debugger
             (target[update.propertyName] as Color3).copyFrom(update.value);
             break;
           case PropChangeType.Color4:

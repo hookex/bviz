@@ -1,22 +1,20 @@
 import React from 'react';
 import {Vector3} from "@babylonjs/core";
-import WithSpring, {WithSpringColor, WithSpringScaling} from "./pages/spring";
+import WithSpring, { WithSpringColor, WithSpringScaling} from "./pages/spring";
 import SpringWithDom from './pages/spring/with-dom';
 import './App.css';
 import {MapViewer} from "./pages/map-viewer";
 import {WithSpringVector3} from "./pages/spring";
-import {WithSpringCamera} from "./pages/spring";
 
 function App() {
     return (
         <div className="App">
             <header className="App-header">
                 {/*<MapViewer/>*/}
-                {/*<WithSpring/>*/}
+                <WithSpring/>
                 {/*<WithSpringColor/>*/}
                 {/*<WithSpringVector3/>*/}
                 {/*<SpringWithDom/>*/}
-                <WithSpringCamera/>
                 {/*<WithSpringScaling/>*/}
             </header>
         </div>

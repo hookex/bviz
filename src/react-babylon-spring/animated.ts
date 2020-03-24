@@ -1,19 +1,14 @@
-import { withAnimated, extendAnimated } from '@react-spring/animated'
-import { CSSProperties, ForwardRefExoticComponent } from 'react'
-import {
-    AssignableKeys,
-    ComponentPropsWithRef,
-    ElementType,
-    SpringValue,
-} from '@react-spring/shared';
-import * as Babylon from '@babylonjs/core'
+import {extendAnimated, withAnimated} from '@react-spring/animated'
+import {CSSProperties, ForwardRefExoticComponent} from 'react'
+import {AssignableKeys, ComponentPropsWithRef, ElementType, SpringValue,} from '@react-spring/shared';
 
 // TODO: Support type-checking for `animated` props
 type BabylonComponents = { [key: string]: ElementType }
 
 // const elements = Object.keys(Babylon).filter(key => /^[A-Z]/.test(key))
 
-const elements = ['transformNode', 'sphere', 'hemisphericLight', 'standardMaterial', 'freeCamera', 'arcRotateCamera'];
+const elements = ['transformNode', 'sphere', 'hemisphericLight',
+    'standardMaterial', 'freeCamera', 'arcRotateCamera', 'ground'];
 
 type CreateAnimated = <T extends ElementType>(
     wrappedComponent: T
@@ -26,15 +21,11 @@ export const animated: CreateAnimated & BabylonComponents = extendAnimated(
     true
 )
 
-export { animated as a }
-
-
+export {animated as a}
 
 
 /** The type of an `animated()` component */
-export type AnimatedComponent<
-    T extends ElementType
-    > = ForwardRefExoticComponent<AnimatedProps<ComponentPropsWithRef<T>>>
+export type AnimatedComponent<T extends ElementType> = ForwardRefExoticComponent<AnimatedProps<ComponentPropsWithRef<T>>>
 
 /** The props of an `animated()` component */
 export type AnimatedProps<Props extends object> = {

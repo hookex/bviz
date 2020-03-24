@@ -6,7 +6,6 @@ export interface EventFunc {
     (mesh: Mesh): void;
 }
 
-
 export function useHover(ref: RefObject<CreatedInstance<Mesh>>, over: EventFunc, out?: EventFunc) {
     useEffect(() => {
         if (ref && ref.current) {
@@ -33,7 +32,7 @@ export function useHover(ref: RefObject<CreatedInstance<Mesh>>, over: EventFunc,
                 )
             );
         }
-    }, [ref, over, out])
+    }, [ref.current, over, out])
 }
 
 export function useClick(ref: RefObject<CreatedInstance<Mesh>>, onClick: EventFunc) {
@@ -52,6 +51,6 @@ export function useClick(ref: RefObject<CreatedInstance<Mesh>>, onClick: EventFu
                 )
             );
         }
-    }, [ref, onClick])
+    }, [ref.current, onClick])
 }
 

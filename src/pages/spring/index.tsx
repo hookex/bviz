@@ -5,19 +5,35 @@ import {useClick, useHover} from '../../hooks';
 import Engine from "../../react-babylonjs/Engine";
 import Scene from "../../react-babylonjs/Scene";
 
-export default function WithSpring() {
-    const cameraProps = useSpring({
-        radius: 10,
-        from: {
-            radius: 30
-        }
+let alpha = 0;
+
+function SpringDemo() {
+    const sphereRef = useRef(null);
+
+    useHover(sphereRef, _ => {
+        set({
+            radius: 30,
+        })
+    }, _ => {
+        set({
+            radius: 10,
+        })
+    });
+
+    useClick(sphereRef, _ => {
+        alpha += Math.PI * 2;
+        set({
+            alpha,
+        })
     });
 
     const lightProps: any = useSpring({intensity: 0.7, from: {intensity: 0.1}});
-    const sphereProps: any = useSpring({
-        position: [0, 1, 0],
+    const meshProps: any = useSpring({
+        position: [0, 0, 0],
+        rotation: [0, 0, 0],
         from: {
-            position: [-3, 1, 0]
+            position: [-100, -100, 0],
+            rotation: [0, Math.PI * 100, 0]
         }
     });
     const colorProps = useSpring({
@@ -27,16 +43,33 @@ export default function WithSpring() {
         }
     });
 
+    const [props, set, stop] = useSpring(() => ({
+        alpha,
+        radius: 10,
+    }));
+
+    return (
+        <>
+            <a.arcRotateCamera name='camera1' alpha={props.alpha} beta={Math.PI / 4} radius={props.radius}
+                               target={Vector3.Zero()}/>
+            <a.hemisphericLight name='light1' intensity={lightProps.intensity} direction={Vector3.Up()}/>
+
+            <a.transformNode name='group' rotation={meshProps.rotation} position={meshProps.position}>
+                <sphere ref={sphereRef} name='sphere1' diameter={2} segments={16}
+                        position={new Vector3(0, 1, 0)}>
+                    <a.standardMaterial name='material' diffuseColor={colorProps.color}/>
+                </sphere>
+                <ground name='ground1' width={6} height={6} subdivisions={2}/>
+            </a.transformNode>
+        </>
+    )
+}
+
+export default function WithSpring() {
     return (
         <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
             <Scene>
-                <a.arcRotateCamera name='camera1' alpha={Math.PI / 2} beta={Math.PI / 4} radius={cameraProps.radius}
-                                   target={Vector3.Zero()}/>
-                <a.hemisphericLight name='light1' intensity={lightProps.intensity} direction={Vector3.Up()}/>
-                <a.sphere name='sphere1' diameter={3} segments={16} position={sphereProps.position}>
-                    <a.standardMaterial name='material' diffuseColor={colorProps.color}/>
-                </a.sphere>
-                <ground name='ground1' width={6} height={6} subdivisions={2}/>
+                <SpringDemo/>
             </Scene>
         </Engine>
     )
@@ -96,50 +129,6 @@ export function WithSpringColor() {
         </Engine>
     )
 }
-
-let alpha = 0;
-
-export function WithSpringCamera() {
-    const [hovered, setHovered] = useState(false);
-
-    const [props, set, stop] = useSpring(() => ({
-        alpha,
-        radius: 10,
-    }));
-
-    const sphereRef = useRef(null);
-    useHover(sphereRef, _ => {
-        set({
-            radius: 30,
-        })
-    }, _ => {
-        set({
-            radius: 10,
-        })
-    });
-
-    useClick(sphereRef, _ => {
-        alpha += Math.PI/2;
-        set({
-            alpha,
-        })
-    });
-
-    return (
-        <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
-            <Scene onScenePointerUp={_ => setHovered(true)}>
-                <a.arcRotateCamera name='camera1' alpha={props.alpha} beta={Math.PI / 4} radius={props.radius}
-                                   target={Vector3.Zero()}/>
-                <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()}/>
-                <transformNode name='group'>
-                    <sphere ref={sphereRef} name='sphere1' diameter={3} segments={16} position={new Vector3(0, 1, 0)}/>
-                    <ground name='ground1' width={6} height={6} subdivisions={2}/>
-                </transformNode>
-            </Scene>
-        </Engine>
-    )
-}
-
 
 export function WithSpringScaling() {
     const [hovered, setHovered] = useState(false);
