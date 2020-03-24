@@ -68,8 +68,8 @@ function SpringDemo() {
                                 direction={Vector3.Up()}/>
 
             <a.transformNode name='group' rotation={meshProps.rotation} position={meshProps.position}>
-                <sphere ref={sphereRef} name='sphere1' diameter={2} segments={16}
-                        position={new Vector3(0, 1, 0)}>
+                <sphere ref={sphereRef} name='sphere1' diameter={3} segments={16}
+                        position={new Vector3(0, 1.5, 0)}>
                     <a.standardMaterial name='material' diffuseColor={colorProps.color}/>
                 </sphere>
                 <ground name='ground1' width={6} height={6} subdivisions={2}/>
