@@ -27,7 +27,17 @@ function SpringDemo() {
         })
     });
 
-    const lightProps: any = useSpring({intensity: 0.7, from: {intensity: 0.1}});
+    const lightProps: any = useSpring({
+        intensity: 1,
+        from: {
+            intensity: 0.5
+        },
+        delay: 1000,
+        config: {
+            duration: 500,
+        }
+    });
+
     const meshProps: any = useSpring({
         position: [0, 0, 0],
         rotation: [0, 0, 0],
@@ -37,9 +47,9 @@ function SpringDemo() {
         }
     });
     const colorProps = useSpring({
-        color: [1, 1, 1, 1],
+        color: [0.9, 0.8, 0.7, 1],
         from: {
-            color: [0, 0, 1, 1]
+            color: [0, 0, 0, 1]
         }
     });
 
@@ -52,7 +62,10 @@ function SpringDemo() {
         <>
             <a.arcRotateCamera name='camera1' alpha={props.alpha} beta={Math.PI / 4} radius={props.radius}
                                target={Vector3.Zero()}/>
-            <a.hemisphericLight name='light1' intensity={lightProps.intensity} direction={Vector3.Up()}/>
+            <a.hemisphericLight name='light1'
+                                diffuse={colorProps.color}
+                                intensity={lightProps.intensity}
+                                direction={Vector3.Up()}/>
 
             <a.transformNode name='group' rotation={meshProps.rotation} position={meshProps.position}>
                 <sphere ref={sphereRef} name='sphere1' diameter={2} segments={16}
