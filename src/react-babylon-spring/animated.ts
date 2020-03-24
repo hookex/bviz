@@ -1,14 +1,14 @@
 import {extendAnimated, withAnimated} from '@react-spring/animated'
 import {CSSProperties, ForwardRefExoticComponent} from 'react'
 import {AssignableKeys, ComponentPropsWithRef, ElementType, SpringValue,} from '@react-spring/shared';
+import {intrinsicClassMap} from "../react-babylonjs/generatedCode";
 
 // TODO: Support type-checking for `animated` props
 type BabylonComponents = { [key: string]: ElementType }
 
 // const elements = Object.keys(Babylon).filter(key => /^[A-Z]/.test(key))
 
-const elements = ['transformNode', 'sphere', 'hemisphericLight',
-    'standardMaterial', 'freeCamera', 'arcRotateCamera', 'ground'];
+const elements = Object.keys(intrinsicClassMap);
 
 type CreateAnimated = <T extends ElementType>(
     wrappedComponent: T
