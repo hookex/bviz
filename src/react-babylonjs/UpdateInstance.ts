@@ -17,6 +17,13 @@ export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate,
     case PropChangeType.Vector3: {
       let {value} = update;
 
+      /**
+       * spring can't interpolate custom Object(Vector3, Color3)
+       */
+      if (Array.isArray(value)) {
+        value = Vector3.FromArray(value);
+      }
+
       if (target[update.propertyName]) {
         (target[update.propertyName] as Vector3).copyFrom(value);
       } else if (value) {
@@ -146,12 +153,7 @@ export const applyProps = (instance: CreatedInstance<any>, props: any) => {
           }
            break;
          case PropChangeType.Vector3:
-           /**
-            * spring can't interpolate custom Object(Vector3, Color3)
-            */
-           if (Array.isArray(value)) {
-             update.value = Vector3.FromArray(value);
-           }
+
            break;
        }
 

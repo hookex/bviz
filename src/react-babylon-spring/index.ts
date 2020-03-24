@@ -21,6 +21,11 @@ Globals.assign({
     //     }
     // }),
     applyAnimatedValues: (node, props) => {
+        console.log('apply')
+        /**
+         * used for update props
+         * initialization don't enter here
+         */
         applyProps(node, props)
     },
     createStringInterpolator,

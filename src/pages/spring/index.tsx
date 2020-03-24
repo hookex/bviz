@@ -1,5 +1,5 @@
 import {Vector3} from "@babylonjs/core";
-import React from "react";
+import React, {useState} from "react";
 import {a, useSpring} from '../../react-babylon-spring';
 import Engine from "../../react-babylonjs/Engine";
 import Scene from "../../react-babylonjs/Scene";
@@ -29,7 +29,8 @@ export default function WithSpring() {
     return (
         <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
             <Scene>
-                <a.arcRotateCamera name='camera1' alpha={Math.PI/2} beta={Math.PI/4} radius={cameraProps.radius} target={Vector3.Zero()}/>
+                <a.arcRotateCamera name='camera1' alpha={Math.PI / 2} beta={Math.PI / 4} radius={cameraProps.radius}
+                                   target={Vector3.Zero()}/>
                 <a.hemisphericLight name='light1' intensity={lightProps.intensity} direction={Vector3.Up()}/>
                 <a.sphere name='sphere1' diameter={3} segments={16} position={sphereProps.position}>
                     <a.standardMaterial name='material' diffuseColor={colorProps.color}/>
@@ -107,7 +108,8 @@ export function WithSpringCamera() {
     return (
         <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
             <Scene>
-                <a.arcRotateCamera name='camera1' alpha={Math.PI/2} beta={Math.PI/4} radius={cameraProps.radius} target={Vector3.Zero()}/>
+                <a.arcRotateCamera name='camera1' alpha={Math.PI / 2} beta={Math.PI / 4} radius={cameraProps.radius}
+                                   target={Vector3.Zero()}/>
                 <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()}/>
                 <sphere name='sphere1' diameter={3} segments={16} position={new Vector3(0, 1, 0)}/>
                 <ground name='ground1' width={6} height={6} subdivisions={2}/>
@@ -115,6 +117,28 @@ export function WithSpringCamera() {
         </Engine>
     )
 }
+
+
+export function WithSpringScaling() {
+    const [hovered, setHovered] = useState(false);
+    const props = useSpring({
+        scaling:  hovered ? [2, 2, 2] : [1, 1, 1],
+    });
+
+    return (
+        <Engine antialias adaptToDeviceRatio canvasId='babylonJS'>
+            <Scene onScenePointerUp={_ => setHovered(true)}>
+                <arcRotateCamera name='camera1' alpha={Math.PI / 2} beta={Math.PI / 4} radius={10}
+                                 target={Vector3.Zero()}/>
+                <hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()}/>
+                <a.sphere name='sphere1' scaling={props.scaling} diameter={3} segments={16}
+                          position={new Vector3(0, 1, 0)}/>
+                <ground name='ground1' width={6} height={6} subdivisions={2}/>
+            </Scene>
+        </Engine>
+    )
+}
+
 // const sphereProps = useSpring({
 //     position: new Vector3(0, 1, 0),
 // }, {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Vector3} from "@babylonjs/core";
-import WithSpring, {WithSpringColor} from "./pages/spring";
+import WithSpring, {WithSpringColor, WithSpringScaling} from "./pages/spring";
 import SpringWithDom from './pages/spring/with-dom';
 import './App.css';
 import {MapViewer} from "./pages/map-viewer";
@@ -12,11 +12,12 @@ function App() {
         <div className="App">
             <header className="App-header">
                 {/*<MapViewer/>*/}
-                <WithSpring/>
+                {/*<WithSpring/>*/}
                 {/*<WithSpringColor/>*/}
                 {/*<WithSpringVector3/>*/}
                 {/*<SpringWithDom/>*/}
                 {/*<WithSpringCamera/>*/}
+                <WithSpringScaling/>
             </header>
         </div>
     );
