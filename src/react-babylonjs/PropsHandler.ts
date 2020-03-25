@@ -1,6 +1,6 @@
 import { Vector3, Color3, Color4 } from '@babylonjs/core/Maths/math'
 import { Control } from '@babylonjs/gui/2D/controls/control'
-import { Observable, FresnelParameters, BaseTexture } from '@babylonjs/core'
+import { Observable, FresnelParameters, BaseTexture, Nullable } from '@babylonjs/core'
 import { type } from 'os'
 
 // TODO: type/value need to be joined, as the method will have multiple.
@@ -26,6 +26,76 @@ export interface HasPropsHandlers<U> {
   addPropsHandler(propHandler: PropsHandler<U>): void
 }
 
+export type PropertyUpdateProcessResult<T> = {
+  processed: boolean,
+  value: Nullable<T>
+}
+
+/**
+ * NOTE: the applyAnimatedValues from react-spring always has `oldProp` undefined, so we force set anything provided.
+ * Would be more efficient to only handle the props passed in.
+ */
+export interface ICustomPropsHandler<T, U> {
+  propChangeType: string
+
+  /**
+   * Like a visitor, except if 'true' is returned the call chain is broken.
+   * So, if you want to override a 'Vector3' with a string and the type is string
+   * then the regular handler will be bypassed.
+   * @param propChangeType
+   */
+  accept(newProp: T): boolean
+
+  // Check old vs new and return proper value, if any.
+  process(oldProp: T | undefined, newProp: T): PropertyUpdateProcessResult<U>
+
+}
+
+export class CustomPropsHandler {
+
+  private static _registeredPropsHandlers: Record<string, ICustomPropsHandler<any, any>[]> = {};
+
+  /**
+   * 
+   * @param handler 
+   */
+  public static RegisterPropsHandler(propsHandler: ICustomPropsHandler<any, any>): void {
+    const propsChangeType: string = propsHandler.propChangeType;
+
+    if (!Array.isArray(CustomPropsHandler._registeredPropsHandlers[propsChangeType])) {
+      CustomPropsHandler._registeredPropsHandlers[propsChangeType] = [];
+    }
+
+    const registeredHandlers: ICustomPropsHandler<any, any>[] = CustomPropsHandler._registeredPropsHandlers[propsChangeType];
+
+    const match = registeredHandlers.forEach(h => h === propsHandler);
+    if (match !== undefined) {
+      console.error(`Handler can only be registered once per type [${propsChangeType}]`);
+      return;
+    }
+
+    registeredHandlers.push(propsHandler);
+  }
+
+  public static HandlePropsChange(propsChangeType: PropChangeType, oldProp: any, newProp: any): PropertyUpdateProcessResult<any> {
+    const registeredHandlers: ICustomPropsHandler<any, any>[] = CustomPropsHandler._registeredPropsHandlers[propsChangeType];
+    const notProcessed: PropertyUpdateProcessResult<any> = { processed: false, value: null};
+    if (registeredHandlers === undefined) {
+      return notProcessed;
+    }
+
+    for (const handler of registeredHandlers) {
+      if (handler.accept(newProp)) {
+        const propertyUpdatedProcessResult: PropertyUpdateProcessResult<any> = handler.process(oldProp, newProp);
+        // console.log('custom property processing result:', propertyUpdatedProcessResult);
+        return propertyUpdatedProcessResult;
+      }
+    }
+
+    return notProcessed;
+  }
+}
+
 export enum PropChangeType {
   Primitive = "Primitive",
   Vector3 = "Vector3",
@@ -40,7 +110,25 @@ export enum PropChangeType {
   Texture = "Texture"
 }
 
+const handledCustomProp = (changeType: PropChangeType, oldProp: any, newProp: any, propertyName: string, propertyType: string, changedProps: PropertyUpdate[]): boolean => {
+  const processedResult = CustomPropsHandler.HandlePropsChange(changeType, oldProp, newProp);
+  if (processedResult.processed) {
+    // console.log(`handled ${PropChangeType.Color3} on ${propertyName} - bypassing built-in handler - new Value: ${JSON.stringify(processedResult.value ?? {})}`);
+    changedProps.push({
+      propertyName,
+      type: propertyType,
+      changeType,
+      value: processedResult.value!
+    })
+  }
+  return processedResult.processed;
+}
+
 export const checkVector3Diff = (oldProp: Vector3 | undefined, newProp: Vector3 | undefined, propertyName: string, propertyType: string, changedProps: PropertyUpdate[]): void => {
+  if (handledCustomProp(PropChangeType.Color3, oldProp, newProp, propertyName, propertyType, changedProps)) {
+    return;
+  }
+  
   if (newProp && (!oldProp || !oldProp.equals(newProp))) {
     changedProps.push({
       propertyName,
@@ -52,6 +140,11 @@ export const checkVector3Diff = (oldProp: Vector3 | undefined, newProp: Vector3 
 }
 
 export const checkColor3Diff = (oldProp: Color3 | undefined, newProp: Color3 | undefined, propertyName: string, propertyType: string, changedProps: PropertyUpdate[]): void => {
+  // console.log(`> checkColor3Diff .${propertyName}: ${JSON.stringify(oldProp)} -> ${JSON.stringify(newProp)}`)
+  if (handledCustomProp(PropChangeType.Color3, oldProp, newProp, propertyName, propertyType, changedProps)) {
+    return;
+  }
+
   if (newProp && (!oldProp || !oldProp.equals(newProp))) {
     changedProps.push({
       propertyName,
@@ -63,6 +156,10 @@ export const checkColor3Diff = (oldProp: Color3 | undefined, newProp: Color3 | u
 }
 
 export const checkColor4Diff = (oldProp: Color4 | undefined, newProp: Color4 | undefined, propertyName: string, propertyType: string, changedProps: PropertyUpdate[]): void => {
+  if (handledCustomProp(PropChangeType.Color4, oldProp, newProp, propertyName, propertyType, changedProps)) {
+    return;
+  }
+  
   // Color4.equals() not added until PR #5517
   if (newProp && (!oldProp || oldProp.r !== newProp.r || oldProp.g !== newProp.g || oldProp.b !== newProp.b || oldProp.a !== newProp.a)) {
     changedProps.push({
@@ -75,6 +172,10 @@ export const checkColor4Diff = (oldProp: Color4 | undefined, newProp: Color4 | u
 }
 
 export const checkFresnelParametersDiff = (oldProp: FresnelParameters | undefined, newProp: FresnelParameters | undefined, propertyName: string, propertyType: string, changedProps: PropertyUpdate[]): void => {
+  if (handledCustomProp(PropChangeType.FresnelParameters, oldProp, newProp, propertyName, propertyType, changedProps)) {
+    return;
+  }
+  
   // FresnelParameters.equals() not added until PR #7818 (https://github.com/BabylonJS/Babylon.js/pull/7818)
   if (newProp /* won't clear the property value */ && (
       !oldProp ||

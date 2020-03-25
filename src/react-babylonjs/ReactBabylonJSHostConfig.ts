@@ -416,7 +416,7 @@ const ReactBabylonJSHostConfig: HostConfig<
     }
 
     if (metadata.delayCreation !== true) {
-      applyInitialPropsToInstance(createdReference, props, scene!);
+      applyInitialPropsToInstance(createdReference, props);
     } else {
       createdReference.deferredCreationProps = props;
     }

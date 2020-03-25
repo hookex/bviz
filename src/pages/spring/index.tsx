@@ -109,9 +109,17 @@ export function WithSpringVector3() {
 
 export function WithSpringColor() {
     const colorProps = useSpring({
-        color: [1, 1, 1, 1],
         from: {
             color: [0, 0, 1, 1]
+        },
+        to: async next => {
+            while(true) {
+                await next({color: [0, 1, 0, 1]})
+                await next({color: [1, 0, 0, 1]})
+                await next({color: [1, 1, 0, 1]})
+                await next({color: [0, 1, 0, 1]})
+                await next({color: [0, 1, 1, 1]})
+            }
         }
     });
 
@@ -133,7 +141,7 @@ export function WithSpringColor() {
             <Scene>
                 <freeCamera name='camera1' position={new Vector3(0, 5, -10)} setTarget={[Vector3.Zero()]}/>
                 <a.hemisphericLight name='light1' intensity={0.7} direction={Vector3.Up()}/>
-                <sphere name='sphere1' diameter={3} segments={16} position={new Vector3(0, 1, 0)}>
+                <sphere name='sphere1' diameter={3} segments={16} position={new Vector3(0, 1.5, 0)}>
                     <a.standardMaterial name='material' diffuseColor={colorProps.color}/>
                 </sphere>
                 <ground name='ground1' width={6} height={6} subdivisions={2}/>
