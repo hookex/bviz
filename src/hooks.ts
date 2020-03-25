@@ -1,4 +1,4 @@
-import {RefObject, useEffect} from "react";
+import {RefObject, useEffect, useRef, useState} from "react";
 import {CreatedInstance} from "./react-babylonjs/CreatedInstance";
 import {ActionManager, ExecuteCodeAction, Mesh} from "@babylonjs/core";
 
@@ -6,10 +6,20 @@ export interface EventFunc {
     (mesh: Mesh): void;
 }
 
-export function useHover(ref: RefObject<CreatedInstance<Mesh>>, over: EventFunc, out?: EventFunc) {
-    useEffect(() => {
-        if (ref && ref.current) {
+function useBabylonRef() {
+    const ref = useRef<CreatedInstance<Mesh>>(null);
+    return ref;
+}
 
+export function useHover(over: EventFunc, out?: EventFunc) {
+    const [value, setValue] = useState(false);
+
+    const ref = useRef<CreatedInstance<Mesh>>(null);
+
+    useEffect(() => {
+        debugger
+        console.log('ref', ref)
+        if (ref && ref.current) {
             const mesh = ref.current.hostInstance as Mesh;
 
             if (!mesh.actionManager) {
@@ -20,6 +30,7 @@ export function useHover(ref: RefObject<CreatedInstance<Mesh>>, over: EventFunc,
                 new ExecuteCodeAction(
                     ActionManager.OnPointerOverTrigger, function (ev) {
                         over && over(mesh);
+                        setValue(true);
                     }
                 )
             );
@@ -28,14 +39,19 @@ export function useHover(ref: RefObject<CreatedInstance<Mesh>>, over: EventFunc,
                 new ExecuteCodeAction(
                     ActionManager.OnPointerOutTrigger, function (ev) {
                         out && out(mesh);
+                        setValue(false);
                     }
                 )
             );
         }
     }, [ref.current, over, out])
+
+    return [ref, value];
 }
 
-export function useClick(ref: RefObject<CreatedInstance<Mesh>>, onClick: EventFunc) {
+export function useClick(onClick: EventFunc) {
+    const ref = useRef<CreatedInstance<Mesh>>(null);
+
     useEffect(() => {
         if (ref && ref.current) {
             const mesh = ref.current.hostInstance as Mesh;
@@ -52,5 +68,7 @@ export function useClick(ref: RefObject<CreatedInstance<Mesh>>, onClick: EventFu
             );
         }
     }, [ref.current, onClick])
+
+    return [ref];
 }
 

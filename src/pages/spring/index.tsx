@@ -1,5 +1,5 @@
 import {Vector3} from "@babylonjs/core";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {a, useSpring} from '../../react-babylon-spring';
 import {useClick, useHover} from '../../hooks';
 import Engine from "../../react-babylonjs/Engine";
@@ -8,9 +8,7 @@ import Scene from "../../react-babylonjs/Scene";
 let alpha = 0;
 
 function SpringDemo() {
-    const sphereRef = useRef(null);
-
-    useHover(sphereRef, _ => {
+    let [sphereRefHover] = useHover( _ => {
         set({
             radius: 30,
         })
@@ -20,7 +18,7 @@ function SpringDemo() {
         })
     });
 
-    useClick(sphereRef, _ => {
+    let [sphereRefClick] = useClick(_ => {
         alpha += Math.PI * 2;
         set({
             alpha,
@@ -68,7 +66,8 @@ function SpringDemo() {
                                 direction={Vector3.Up()}/>
 
             <a.transformNode name='group' rotation={meshProps.rotation} position={meshProps.position}>
-                <sphere ref={sphereRef} name='sphere1' diameter={3} segments={16}
+                <sphere ref={refCb}
+                        name='sphere1' diameter={3} segments={16}
                         position={new Vector3(0, 1.5, 0)}>
                     <a.standardMaterial name='material' diffuseColor={colorProps.color}/>
                 </sphere>
