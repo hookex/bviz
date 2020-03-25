@@ -84,8 +84,7 @@ function App() {
         <div className="App">
             <header className="App-header">
                 {/*<MapViewer/>*/}
-                {/* <WithSpring/> */}
-                <WithSpringColor />
+                 <WithSpring/>
                 {/* <WithSpringVector3/> */}
                 {/*<SpringWithDom/>*/}
                 {/*<WithSpringScaling/>*/}

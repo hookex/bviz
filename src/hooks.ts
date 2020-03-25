@@ -6,20 +6,13 @@ export interface EventFunc {
     (mesh: Mesh): void;
 }
 
-function useBabylonRef() {
-    const ref = useRef<CreatedInstance<Mesh>>(null);
-    return ref;
-}
-
-export function useHover(over: EventFunc, out?: EventFunc) {
+export function useHover(over: EventFunc, out?: EventFunc): [RefObject<CreatedInstance<Mesh>>, boolean] {
     const [value, setValue] = useState(false);
 
     const ref = useRef<CreatedInstance<Mesh>>(null);
 
     useEffect(() => {
-        debugger
-        console.log('ref', ref)
-        if (ref && ref.current) {
+       if (ref.current) {
             const mesh = ref.current.hostInstance as Mesh;
 
             if (!mesh.actionManager) {
@@ -53,7 +46,7 @@ export function useClick(onClick: EventFunc) {
     const ref = useRef<CreatedInstance<Mesh>>(null);
 
     useEffect(() => {
-        if (ref && ref.current) {
+        if (ref.current) {
             const mesh = ref.current.hostInstance as Mesh;
             if (!mesh.actionManager) {
                 mesh.actionManager = new ActionManager(mesh.getScene());

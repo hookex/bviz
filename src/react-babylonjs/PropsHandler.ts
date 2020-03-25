@@ -2,6 +2,7 @@ import { Vector3, Color3, Color4 } from '@babylonjs/core/Maths/math'
 import { Control } from '@babylonjs/gui/2D/controls/control'
 import { Observable, FresnelParameters, BaseTexture, Nullable } from '@babylonjs/core'
 import { type } from 'os'
+import {isEqual} from "./utils/property.unit";
 
 // TODO: type/value need to be joined, as the method will have multiple.
 export interface PropertyUpdate {
@@ -56,8 +57,8 @@ export class CustomPropsHandler {
   private static _registeredPropsHandlers: Record<string, ICustomPropsHandler<any, any>[]> = {};
 
   /**
-   * 
-   * @param handler 
+   *
+   * @param handler
    */
   public static RegisterPropsHandler(propsHandler: ICustomPropsHandler<any, any>): void {
     const propsChangeType: string = propsHandler.propChangeType;
@@ -128,8 +129,8 @@ export const checkVector3Diff = (oldProp: Vector3 | undefined, newProp: Vector3 
   if (handledCustomProp(PropChangeType.Color3, oldProp, newProp, propertyName, propertyType, changedProps)) {
     return;
   }
-  
-  if (newProp && (!oldProp || !oldProp.equals(newProp))) {
+
+  if (newProp && (!oldProp || isEqual(newProp, oldProp))) {
     changedProps.push({
       propertyName,
       type: propertyType,
@@ -145,7 +146,7 @@ export const checkColor3Diff = (oldProp: Color3 | undefined, newProp: Color3 | u
     return;
   }
 
-  if (newProp && (!oldProp || !oldProp.equals(newProp))) {
+  if (newProp && (!oldProp || isEqual(newProp, oldProp))) {
     changedProps.push({
       propertyName,
       type: propertyType,
@@ -159,7 +160,7 @@ export const checkColor4Diff = (oldProp: Color4 | undefined, newProp: Color4 | u
   if (handledCustomProp(PropChangeType.Color4, oldProp, newProp, propertyName, propertyType, changedProps)) {
     return;
   }
-  
+
   // Color4.equals() not added until PR #5517
   if (newProp && (!oldProp || oldProp.r !== newProp.r || oldProp.g !== newProp.g || oldProp.b !== newProp.b || oldProp.a !== newProp.a)) {
     changedProps.push({
@@ -175,7 +176,7 @@ export const checkFresnelParametersDiff = (oldProp: FresnelParameters | undefine
   if (handledCustomProp(PropChangeType.FresnelParameters, oldProp, newProp, propertyName, propertyType, changedProps)) {
     return;
   }
-  
+
   // FresnelParameters.equals() not added until PR #7818 (https://github.com/BabylonJS/Babylon.js/pull/7818)
   if (newProp /* won't clear the property value */ && (
       !oldProp ||
@@ -270,7 +271,7 @@ export const checkObservableDiff = (oldProp: Observable<any>, newProp: Observabl
 /**
  * This method differs from the rest in that we need to pass in a list of arguments.  Can be done by using:
  * 1. an array to signify each parameter (or Object.values(...)).
- * 
+ *
  * @param oldProp value of method (array, object, primitive, etc.)
  * @param newProp value of method (array, object, primitive, etc.)
  * @param propertyName name of property for diff
