@@ -1,9 +1,9 @@
 import {MutableRefObject, useEffect, useRef, useState} from "react";
 import {CreatedInstance} from "./react-babylonjs/CreatedInstance";
-import {ActionManager, ExecuteCodeAction, Mesh} from "@babylonjs/core";
+import {ActionEvent, ActionManager, ExecuteCodeAction, Mesh} from "@babylonjs/core";
 
 export interface EventFunc {
-    (mesh: Mesh): void;
+    (ev: ActionEvent): void;
 }
 
 export function useHover(over?: EventFunc, out?: EventFunc): [MutableRefObject<CreatedInstance<Mesh|null>>, boolean] {
@@ -22,7 +22,7 @@ export function useHover(over?: EventFunc, out?: EventFunc): [MutableRefObject<C
             mesh.actionManager.registerAction(
                 new ExecuteCodeAction(
                     ActionManager.OnPointerOverTrigger, function (ev) {
-                        over && over(mesh);
+                        over && over(ev);
                         setValue(true);
                     }
                 )
@@ -31,13 +31,13 @@ export function useHover(over?: EventFunc, out?: EventFunc): [MutableRefObject<C
             mesh.actionManager.registerAction(
                 new ExecuteCodeAction(
                     ActionManager.OnPointerOutTrigger, function (ev) {
-                        out && out(mesh);
+                        out && out(ev);
                         setValue(false);
                     }
                 )
             );
         }
-    }, [ref.current, over, out])
+    }, [ref.current])
 
     return [ref, value];
 }
@@ -48,6 +48,7 @@ export function useClick(onClick: EventFunc): [MutableRefObject<CreatedInstance<
     useEffect(() => {
         if (ref.current) {
             const mesh = ref.current.hostInstance as Mesh;
+
             if (!mesh.actionManager) {
                 mesh.actionManager = new ActionManager(mesh.getScene());
             }
@@ -55,12 +56,12 @@ export function useClick(onClick: EventFunc): [MutableRefObject<CreatedInstance<
             mesh.actionManager.registerAction(
                 new ExecuteCodeAction(
                     ActionManager.OnPickTrigger, function (ev) {
-                        onClick(mesh);
+                        onClick(ev);
                     }
                 )
             );
         }
-    }, [ref.current, onClick])
+    }, [ref.current])
 
     return [ref];
 }
