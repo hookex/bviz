@@ -133,4 +133,4 @@ export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, prop
       applyUpdateToInstance(instance.hostInstance, update, instance.metadata!.className)
     })
   }
-}
+};

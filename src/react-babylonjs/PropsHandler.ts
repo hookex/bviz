@@ -126,7 +126,7 @@ const handledCustomProp = (changeType: PropChangeType, oldProp: any, newProp: an
 }
 
 export const checkVector3Diff = (oldProp: Vector3 | undefined, newProp: Vector3 | undefined, propertyName: string, propertyType: string, changedProps: PropertyUpdate[]): void => {
-  if (handledCustomProp(PropChangeType.Color3, oldProp, newProp, propertyName, propertyType, changedProps)) {
+  if (handledCustomProp(PropChangeType.Vector3, oldProp, newProp, propertyName, propertyType, changedProps)) {
     return;
   }
 

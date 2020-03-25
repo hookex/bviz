@@ -1,4 +1,4 @@
-import {RefObject, useEffect, useRef, useState} from "react";
+import {MutableRefObject, useEffect, useRef, useState} from "react";
 import {CreatedInstance} from "./react-babylonjs/CreatedInstance";
 import {ActionManager, ExecuteCodeAction, Mesh} from "@babylonjs/core";
 
@@ -6,10 +6,10 @@ export interface EventFunc {
     (mesh: Mesh): void;
 }
 
-export function useHover(over: EventFunc, out?: EventFunc): [RefObject<CreatedInstance<Mesh>>, boolean] {
+export function useHover(over?: EventFunc, out?: EventFunc): [MutableRefObject<CreatedInstance<Mesh|null>>, boolean] {
     const [value, setValue] = useState(false);
 
-    const ref = useRef<CreatedInstance<Mesh>>(null);
+    const ref = useRef<CreatedInstance<Mesh>>(null) as MutableRefObject<CreatedInstance<Mesh|null>>;
 
     useEffect(() => {
        if (ref.current) {
@@ -42,8 +42,8 @@ export function useHover(over: EventFunc, out?: EventFunc): [RefObject<CreatedIn
     return [ref, value];
 }
 
-export function useClick(onClick: EventFunc) {
-    const ref = useRef<CreatedInstance<Mesh>>(null);
+export function useClick(onClick: EventFunc): [MutableRefObject<CreatedInstance<Mesh|null>>]{
+    const ref = useRef<CreatedInstance<Mesh>>(null) as MutableRefObject<CreatedInstance<Mesh|null>>;
 
     useEffect(() => {
         if (ref.current) {
