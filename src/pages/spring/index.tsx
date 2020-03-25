@@ -23,34 +23,35 @@ let alpha = 0;
 function SpringDemo() {
     const [refSphereHover, isHovered] = useHover(_ => {
         set({
-            radius: 30,
+            radius: 10,
         })
     }, _ => {
         set({
-            radius: 10,
+            radius: 12,
         })
     });
 
     const [refSphereClick] = useClick(_ => {
         alpha += Math.PI * 2;
-        set({
-            alpha,
+        setProps({
+            rotation: [0, alpha, 0]
         })
     });
 
     const lightProps: any = useSpring({
         intensity: 1,
+        color: [0.9, 0.8, 0.7, 1],
         from: {
             intensity: 0.5
         },
         delay: 1000,
         config: {
             duration: 500,
-        }
+        },
     });
 
-    const props: any = useSpring({
-        position:  [0, 0, 0],
+    const [props, setProps] = useSpring(() => ({
+        position: [0, 0, 0],
         rotation: [0, 0, 0],
         scaling: isHovered ? [2, 2, 2] : [1, 1, 1],
         color: isHovered ? [0.3, 0.6, 0.9, 1] : [0.9, 0.8, 0.7, 1],
@@ -60,11 +61,15 @@ function SpringDemo() {
             rotation: [0, Math.PI * 100, 0],
             color: [0, 0, 0, 1]
         }
-    });
+    }));
 
     const [cameraProps, set, stop] = useSpring(() => ({
         alpha,
-        radius: 10,
+        beta: Math.PI / 4,
+        radius: 12,
+        from: {
+            beta: Math.PI / 2,
+        }
     }));
 
     const refCb = (instance: any) => {
@@ -74,22 +79,26 @@ function SpringDemo() {
 
     return (
         <>
-            <a.arcRotateCamera name='camera1' alpha={cameraProps.alpha} beta={Math.PI / 4} radius={cameraProps.radius}
+            <a.arcRotateCamera name='camera1' alpha={0} beta={cameraProps.beta} radius={cameraProps.radius}
                                target={Vector3.Zero()}/>
             <a.hemisphericLight name='light1'
-                                diffuse={props.color}
+                                diffuse={lightProps.color}
                                 intensity={lightProps.intensity}
                                 direction={Vector3.Up()}/>
+            <a.sphere ref={refCb} name='sphere1' diameter={3} segments={16}
+                      scaling={props.scaling}
+                      position={new Vector3(0, 1.5, 0)}>
+                <a.standardMaterial name='material' diffuseColor={props.color}/>
+            </a.sphere>
+            <a.ground position={props.groundPosition}
+                      name='ground1' width={6} height={6} subdivisions={2}/>
 
             <a.transformNode name='group' rotation={props.rotation} position={props.position}>
-                <a.sphere ref={refCb} name='sphere1' diameter={3} segments={16}
-                          scaling={props.scaling}
-                          position={new Vector3(0, 1.5, 0)}>
-                    <a.standardMaterial name='material' diffuseColor={props.color}/>
+                <a.sphere name='sphere1' diameter={0.4} segments={16}
+                          position={new Vector3(4, 2, 0)}>
                 </a.sphere>
-                <a.ground position={props.groundPosition}
-                          name='ground1' width={6} height={6} subdivisions={2}/>
             </a.transformNode>
+
         </>
     )
 }
