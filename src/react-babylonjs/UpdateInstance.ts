@@ -90,7 +90,7 @@ export const applyUpdateToInstance = (hostInstance: any, update: PropertyUpdate,
  * @param props
  * @param scene
  */
-export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, props: any, scene?: Scene) => {
+export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, props: any) => {
   if (!instance.propsHandlers) {
     return;
   }
@@ -110,58 +110,27 @@ export const applyInitialPropsToInstance = (instance: CreatedInstance<any>, prop
 
   if (initPayload.length > 0) {
     initPayload.forEach(update => {
+      // switch (update.changeType) {
+      //   case PropChangeType.Color3:
+      //     if (typeof value === 'string') {
+      //       console.log('found string color3')
+      //       // update.value = Color3.FromArray(parseRgbaString(value));
+      //     } else if (Array.isArray(value)) {
+      //       console.log('found array - color3')
+      //      // update.value = Color3.FromArray(value);
+      //     }
+      //     break;
+      //   case PropChangeType.Color4:
+      //    if (typeof value === 'string') {
+      //        // console.log('found string:', value)
+      //        // update.value = Color4.FromArray(parseRgbaString(value));
+      //    }
+      //     break;
+      //   case PropChangeType.Vector3:
+
+      //     break;
+      // }
       applyUpdateToInstance(instance.hostInstance, update, instance.metadata!.className)
     })
   }
 }
-
-
-export const applyProps = (instance: CreatedInstance<any>, props: any) => {
-  if (!instance.propsHandlers) {
-    return;
-  }
-
-  let initPayload: PropertyUpdate[] = []
-  instance.propsHandlers.getPropsHandlers().forEach((propHandler: PropsHandler<any>) => {
-    // NOTE: this can actually be WRONG, because here we want to compare the props with the object.
-    // This is only needed right after object instantiation.
-    let handlerUpdates: PropertyUpdate[] | null = propHandler.getPropertyUpdates(
-        {}, // Here we will reapply things like 'name', so we could get default props from 'babylonObject'.
-        props
-    )
-    if (handlerUpdates !== null) {
-      initPayload.push(...handlerUpdates)
-    }
-  })
-
-  if (initPayload.length > 0) {
-    initPayload.forEach(update => {
-      let {value} = update;
-
-      switch (update.changeType) {
-         case PropChangeType.Color3:
-           if (typeof value === 'string') {
-             update.value = Color3.FromArray(parseRgbaString(value));
-           } else if (Array.isArray(value)) {
-             update.value = Color3.FromArray(value);
-           }
-           break;
-         case PropChangeType.Color4:
-          if (typeof value === 'string') {
-              update.value = Color4.FromArray(parseRgbaString(value));
-          }
-           break;
-         case PropChangeType.Vector3:
-
-           break;
-       }
-
-      applyUpdateToInstance(instance.hostInstance, update, instance.metadata!.className)
-    })
-  }
-};
-
-function parseRgbaString(rgba: string): number[] {
-  const arr:string[] = rgba.replace(/[^\d,]/g, '').split(',');
-  return arr.map(num => parseInt(num, 10) / 255);
-};

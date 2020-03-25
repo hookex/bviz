@@ -1,19 +1,92 @@
 import React from 'react';
-import {Vector3} from "@babylonjs/core";
+import {Vector3, Color3, Color4} from "@babylonjs/core";
 import WithSpring, { WithSpringColor, WithSpringScaling} from "./pages/spring";
 import SpringWithDom from './pages/spring/with-dom';
 import './App.css';
 import {MapViewer} from "./pages/map-viewer";
 import {WithSpringVector3} from "./pages/spring";
+import { ICustomPropsHandler, PropChangeType, PropertyUpdateProcessResult, CustomPropsHandler } from './react-babylonjs/PropsHandler';
+
+function parseRgbaString(rgba: string): number[] {
+    const arr:string[] = rgba.replace(/[^\d,]/g, '').split(',');
+    return arr.map(num => parseInt(num, 10) / 255);
+  };
+
+class CustomColor3StringHandler implements ICustomPropsHandler<string, Color3> {
+    public propChangeType: string = PropChangeType.Color3;
+    accept(newProp: string): boolean {
+        return typeof(newProp) === 'string';
+    }
+    process(oldProp: string, newProp: string): PropertyUpdateProcessResult<Color3> {
+        if (oldProp !== newProp) {
+            return {
+                processed: true,
+                value: Color3.FromArray(parseRgbaString(newProp))
+            };
+        }
+
+        return { processed: false, value: null};
+    }
+}
+
+class CustomColor3ArrayHandler implements ICustomPropsHandler<number[], Color3> {
+    public propChangeType: string = PropChangeType.Color3;
+    accept(newProp: []): boolean {
+        return Array.isArray(newProp);
+    }
+    process(oldProp: number[], newProp: number[]): PropertyUpdateProcessResult<Color3> {
+        if (oldProp === undefined || oldProp.length !== newProp.length) {
+            // console.log(`found diff length (${oldProp?.length}/${newProp?.length}) Color3Array new? ${oldProp === undefined}`)
+            return {
+                processed: true,
+                value: Color3.FromArray(newProp)
+            };
+        }
+
+        for(let i = 0; i< oldProp.length; i++) {
+            if (oldProp[i] !== newProp[i]) {
+                // console.log('found diff value Color3Array')
+                return {
+                    processed: true,
+                    value: Color3.FromArray(newProp)
+                };
+            }
+        }
+
+        return { processed: false, value: null};
+    }
+}
+
+class CustomColor4StringHandler implements ICustomPropsHandler<string, Color4> {
+    public propChangeType: string = PropChangeType.Color4;
+    accept(newProp: string): boolean {
+        return typeof(newProp) === 'string';
+    }
+    process(oldProp: string, newProp: string): PropertyUpdateProcessResult<Color4> {
+        if (oldProp !== newProp) {
+            // console.log('found diff Color4String')
+            return {
+                processed: true,
+                value: Color4.FromArray(parseRgbaString(newProp))
+            };
+        }
+
+        return { processed: false, value: null};
+    }
+}
+
+CustomPropsHandler.RegisterPropsHandler(new CustomColor3StringHandler());
+CustomPropsHandler.RegisterPropsHandler(new CustomColor3ArrayHandler());
+CustomPropsHandler.RegisterPropsHandler(new CustomColor4StringHandler());
 
 function App() {
     return (
         <div className="App">
             <header className="App-header">
                 {/*<MapViewer/>*/}
-                <WithSpring/>
-                {/*<WithSpringColor/>*/}
-                {/*<WithSpringVector3/>*/}
+                {/* <WithSpring/> */}
+                <WithSpringColor />
+                {/* <WithSpringVector3/> */}
                 {/*<SpringWithDom/>*/}
                 {/*<WithSpringScaling/>*/}
             </header>

@@ -1,6 +1,6 @@
 import {Globals} from '@react-spring/core';
 import {createStringInterpolator} from '@react-spring/shared/stringInterpolation';
-import {applyInitialPropsToInstance, applyProps} from "../react-babylonjs/UpdateInstance";
+import {applyInitialPropsToInstance} from "../react-babylonjs/UpdateInstance";
 
 function addEffect() {
     console.log('addEffect');
@@ -25,7 +25,7 @@ Globals.assign({
          * used for update props
          * initialization don't enter here
          */
-        applyProps(node, props)
+        applyInitialPropsToInstance(node, props)
     },
     createStringInterpolator,
     // createAnimatedInterpolation: (...args: [any, any]) => {
